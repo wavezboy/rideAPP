@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
 import { RegisterBody, validateRegisterInput } from "../utils/registerValidate";
 import userModel from "../models/userModel";
-import { hashData } from "../utils/dataHashing";
+import { hashData, verifyHashedData } from "../utils/dataHashing";
 import { email } from "envalid";
+import { loginBody, loginValidate } from "../utils/loginValidate";
 
 export const register: RequestHandler<
   unknown,
@@ -15,7 +16,7 @@ export const register: RequestHandler<
 
   try {
     //   check validation
-    if (isValid) {
+    if (!isValid) {
       res.status(500).json(errors);
     }
 
@@ -36,6 +37,43 @@ export const register: RequestHandler<
     });
 
     res.status(201).json(newUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const login: RequestHandler<
+  unknown,
+  unknown,
+  loginBody,
+  unknown
+> = async (req, res, next) => {
+  // form validation
+
+  const { errors, isValid } = loginValidate(req.body);
+  try {
+    if (!isValid) {
+      res.status(500).json(errors);
+    }
+
+    const user = await userModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      res.status(400).json("no user asscociated with provided email");
+    }
+
+    const hashedPassword = user!.password;
+
+    const passwordMatch = await verifyHashedData(
+      hashedPassword,
+      req.body.password
+    );
+
+    if (!passwordMatch) {
+      res.status(400).json("Incorrect passwword");
+    }
+
+    res.status(201).json(user);
   } catch (error) {
     next(error);
   }
