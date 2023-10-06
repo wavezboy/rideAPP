@@ -3,11 +3,28 @@ import { InferSchemaType, Schema, model } from "mongoose";
 const rideRequestSchema = new Schema(
   {
     passenger_id: { type: String },
-    start_location: {
-      latitude: { type: String },
-      longitude: { type: String },
+    startLocation: {
+      types: {
+        type: String,
+        enum: ["Point"], // Specify the type as 'Point'
+        required: true,
+      },
+      coordinates: {
+        type: [Number], // Store [longitude, latitude]
+        required: true,
+      },
     },
-    end_location: { latitude: { type: String }, longitude: { type: String } },
+    endLocation: {
+      types: {
+        type: String,
+        enum: ["Point"], // Specify the type as 'Point'
+        required: true,
+      },
+      coordinates: {
+        type: [Number], // Store [longitude, latitude]
+        required: true,
+      },
+    },
     status: { type: String },
     driver_id: { type: String },
     estimated_fare: { type: String },
@@ -16,5 +33,7 @@ const rideRequestSchema = new Schema(
 );
 
 type ride = InferSchemaType<typeof rideRequestSchema>;
+
+rideRequestSchema.index({ startLocation: "2dsphere", endLocation: "2dsphere" });
 
 export default model<ride>("ride", rideRequestSchema);
