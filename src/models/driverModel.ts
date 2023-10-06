@@ -4,7 +4,10 @@ const driverSchema = new Schema(
   {
     driver_id: { type: String },
     vehicle_info: { type: String },
-    current_location: { type: String },
+    current_location: {
+      longitude: { type: String },
+      latitude: { type: String },
+    },
     availability: { type: Boolean },
   },
   { timestamps: true }

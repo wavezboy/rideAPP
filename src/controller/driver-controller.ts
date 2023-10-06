@@ -63,3 +63,34 @@ export const updateDriverAvailaibilty: RequestHandler = async (
     next(error);
   }
 };
+
+interface location {
+  latitude: string;
+  longitude: string;
+}
+
+export const updateDriverLocation: RequestHandler<
+  unknown,
+  unknown,
+  location,
+  unknown
+> = async (req, res, next) => {
+  const { latitude, longitude } = req.body;
+  const authenticatedId = "";
+  try {
+    const driver = await driverModel.findById({}).exec();
+
+    if (!driver) {
+      res.status(500).json("no driver found");
+      throw CreateHttpError(500, "no driver found");
+    }
+
+    driver.current_location = { latitude, longitude };
+
+    const updatedDriver = await driver.save();
+
+    res.status(201).json({ message: "driver location updated", updatedDriver });
+  } catch (error) {
+    next(error);
+  }
+};
