@@ -65,8 +65,8 @@ export const updateDriverAvailaibilty: RequestHandler = async (
 };
 
 export interface location {
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
 }
 
 export const updateDriverLocation: RequestHandler<
@@ -85,7 +85,10 @@ export const updateDriverLocation: RequestHandler<
       throw CreateHttpError(500, "no driver found");
     }
 
-    driver.current_location = { latitude, longitude };
+    driver.currentLocation = {
+      coordinates: [latitude, longitude],
+      types: "Point",
+    };
 
     const updatedDriver = await driver.save();
 

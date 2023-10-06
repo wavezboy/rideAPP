@@ -30,3 +30,10 @@ export const createRideRequest: RequestHandler<
     next(error);
   }
 };
+
+export const matchRequest: RequestHandler = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
