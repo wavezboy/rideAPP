@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import driverModel from "../models/driverModel";
+import CreateHttpError from "http-errors";
 
 interface driverBody {
   vehicleInfo: string;
@@ -17,7 +18,7 @@ export const registerDriver: RequestHandler<
   const driver_id = "";
   try {
     // check existingDriver
-    const existingDriver = await driverModel.findOne({});
+    const existingDriver = await driverModel.findOne({}).exec();
 
     if (existingDriver) {
       res.status(500).json("user is already a driver");
@@ -31,6 +32,33 @@ export const registerDriver: RequestHandler<
     });
 
     res.status(201).json(driver);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateDriverAvailaibilty: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  const authenticatedId = "";
+  const availability = req.body;
+  try {
+    const driver = await driverModel.findById(authenticatedId).exec();
+
+    if (!driver) {
+      res.status(500).json("driver not found");
+      throw CreateHttpError(500, "driver not found");
+    }
+
+    driver.availability = availability;
+
+    const updateDriver = await driver.save();
+
+    res
+      .status(201)
+      .json({ message: "driver availaibilty updated", updateDriver });
   } catch (error) {
     next(error);
   }
