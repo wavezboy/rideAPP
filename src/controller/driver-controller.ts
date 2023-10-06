@@ -64,7 +64,7 @@ export const updateDriverAvailaibilty: RequestHandler = async (
   }
 };
 
-interface location {
+export interface location {
   latitude: string;
   longitude: string;
 }
