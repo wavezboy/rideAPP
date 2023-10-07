@@ -3,6 +3,7 @@ import { location } from "./driver-controller";
 import rideRequestModel from "../models/ride-request-model";
 import CreateHttpError from "http-errors";
 import driverModel from "../models/driverModel";
+
 import { calculateDistance } from "../utils/calculateDistance";
 
 interface requestBody {
@@ -67,7 +68,7 @@ export const matchRequest: RequestHandler = async (req, res, next) => {
     });
 
     // Implement your logic to choose the best-matched driver
-    let bestMatchedDriver = null || typeof driverModel
+    let bestMatchedDriver = await driverModel.findById({}).exec();
     let bestMatchedDistance = Number.MAX_VALUE;
 
     for (const driver of availableDrivers) {
@@ -95,7 +96,17 @@ export const matchRequest: RequestHandler = async (req, res, next) => {
     //  update the match request with selected driver
 
     if (bestMatchedDriver) {
-      rideRequest.driver_id = bestMatchedDriver.
+      rideRequest.driver_id = bestMatchedDriver.driver_id;
+      rideRequest.status = "matched";
+
+      await rideRequest.save();
+      res
+        .status(200)
+        .json({ message: "driver macthed succesfully ", rideRequest });
+    } else {
+      res
+        .status(404)
+        .json({ error: "no available driver within specified range" });
     }
   } catch (error) {
     next(error);
