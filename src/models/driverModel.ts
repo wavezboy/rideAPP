@@ -2,7 +2,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 
 const driverSchema = new Schema(
   {
-    driver_id: { type: String },
+    driver_id: { type: String, required: true },
     vehicle_info: { type: String },
     currentLocation: {
       types: {

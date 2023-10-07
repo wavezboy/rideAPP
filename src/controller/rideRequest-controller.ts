@@ -3,6 +3,7 @@ import { location } from "./driver-controller";
 import rideRequestModel from "../models/ride-request-model";
 import CreateHttpError from "http-errors";
 import driverModel from "../models/driverModel";
+import { calculateDistance } from "../utils/calculateDistance";
 
 interface requestBody {
   start_location: location;
@@ -66,15 +67,35 @@ export const matchRequest: RequestHandler = async (req, res, next) => {
     });
 
     // Implement your logic to choose the best-matched driver
-    let bestMatchedDriver = null;
+    let bestMatchedDriver = null || typeof driverModel
     let bestMatchedDistance = Number.MAX_VALUE;
 
     for (const driver of availableDrivers) {
       // calculating the distance between driver and request
       const driverLocation = driver.currentLocation?.coordinates;
-      const passengerLocation = rideRequest.startLocation?.coordinates;
+      const passengerLocation = rideRequest!.startLocation?.coordinates;
 
-      const distance = calculateDistance();
+      if (!(driverLocation && passengerLocation)) {
+        throw CreateHttpError(
+          500,
+          "driver location or passenger location not available"
+        );
+      }
+
+      const distance = calculateDistance(passengerLocation, driverLocation);
+
+      // check if distance is closer to the request than the current best match
+
+      if (distance < bestMatchedDistance) {
+        bestMatchedDistance = distance;
+        bestMatchedDriver = driver;
+      }
+    }
+
+    //  update the match request with selected driver
+
+    if (bestMatchedDriver) {
+      rideRequest.driver_id = bestMatchedDriver.
     }
   } catch (error) {
     next(error);
