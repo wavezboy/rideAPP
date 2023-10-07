@@ -145,3 +145,16 @@ export const cancelRequest: RequestHandler<
     next(error);
   }
 };
+
+export const getRideRequest: RequestHandler = async (req, res, next) => {
+  const driverId = "";
+  try {
+    const rideRequests = await rideRequestModel.find({
+      driver_id: driverId,
+      status: "matched",
+    });
+    res.status(200).json({ rideRequests });
+  } catch (error) {
+    next(error);
+  }
+};
