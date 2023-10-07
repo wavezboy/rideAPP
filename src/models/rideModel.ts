@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, model } from "mongoose";
+import { InferSchemaType, Schema, Types, model } from "mongoose";
 
 const rideSchema = new Schema(
   {
@@ -8,6 +8,7 @@ const rideSchema = new Schema(
     end_time: { type: String },
     fare: { type: String },
     distance: { type: String },
+    ride_request_id: { type: Types.ObjectId },
   },
   { timestamps: true }
 );

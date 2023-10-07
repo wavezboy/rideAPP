@@ -28,6 +28,7 @@ const rideRequestSchema = new Schema(
     status: { type: String },
     driver_id: { type: String },
     estimated_fare: { type: String },
+    // ride_id: { type: Types.ObjectId },
   },
   { timestamps: true }
 );

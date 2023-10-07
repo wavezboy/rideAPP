@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import rideModel from "../models/rideModel";
+import rideRequestModel from "../models/ride-request-model";
 
 interface rideReqBody {
   rideId: string;
@@ -22,6 +23,18 @@ export const startRide: RequestHandler<
     ride.start_time = new Date();
 
     ride.save();
+
+    const rideRequestId = ride.ride_request_id;
+
+    const rideRequest = await rideRequestModel.findOne(rideRequestId);
+
+    if (!rideRequest) {
+      return res.status(404).json("associated ride request not found");
+    }
+
+    rideRequest.status = "ongoing";
+
+    rideRequest.save();
 
     res.status(200).json(ride);
   } catch (error) {

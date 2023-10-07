@@ -186,7 +186,10 @@ export const acceptRideRequest: RequestHandler<
     const ride = await rideModel.create({
       driver_id: rideRequest.driver_id,
       passenger_id: rideRequest.passenger_id,
+      ride_request_id: rideRequest._id,
     });
+
+    rideRequest.status = "accepted";
 
     res.status(200).json(ride);
   } catch (error) {
