@@ -3,6 +3,7 @@ import { location } from "./driver-controller";
 import rideRequestModel from "../models/ride-request-model";
 import CreateHttpError from "http-errors";
 import driverModel from "../models/driverModel";
+import rideModel from "../models/rideModel";
 
 import { calculateDistance } from "../utils/calculateDistance";
 
@@ -149,10 +150,15 @@ export const cancelRideRequest: RequestHandler<
 export const getRideRequest: RequestHandler = async (req, res, next) => {
   const driverId = "";
   try {
-    const rideRequests = await rideRequestModel.find({
+    const rideRequests = await rideRequestModel.findOne({
       driver_id: driverId,
       status: "matched",
     });
+
+    if (!rideRequests) {
+      return res.status(404).json("no request available");
+    }
+
     res.status(200).json({ rideRequests });
   } catch (error) {
     next(error);
