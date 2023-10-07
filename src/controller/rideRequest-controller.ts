@@ -164,3 +164,32 @@ export const getRideRequest: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+interface RidereqBody {
+  rideRequestId: string;
+}
+
+export const acceptRideRequest: RequestHandler<
+  RidereqBody,
+  unknown,
+  unknown,
+  unknown
+> = async (req, res, next) => {
+  const rideRequestId = req.params.rideRequestId;
+  try {
+    const rideRequest = await rideRequestModel.findOne({ _id: rideRequestId });
+
+    if (!rideRequest) {
+      return res.status(404).json("ride not found");
+    }
+
+    const ride = await rideModel.create({
+      driver_id: rideRequest.driver_id,
+      passenger_id: rideRequest.passenger_id,
+    });
+
+    res.status(200).json(ride);
+  } catch (error) {
+    next(error);
+  }
+};
