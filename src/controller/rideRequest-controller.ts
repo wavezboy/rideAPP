@@ -42,7 +42,7 @@ export const createRideRequest: RequestHandler<
   }
 };
 
-export const matchRequest: RequestHandler = async (req, res, next) => {
+export const matchRideRequest: RequestHandler = async (req, res, next) => {
   const passenger_id = "";
   const rideRequest = await rideRequestModel.findOne({ passenger_id }).exec();
   try {
@@ -117,7 +117,7 @@ interface reqBody {
   requestId: string;
 }
 
-export const cancelRequest: RequestHandler<
+export const cancelRideRequest: RequestHandler<
   reqBody,
   unknown,
   unknown,
