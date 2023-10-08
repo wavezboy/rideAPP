@@ -1,7 +1,14 @@
 import { RequestHandler } from "express";
 import rideModel from "../models/rideModel";
 import rideRequestModel from "../models/ride-request-model";
+import { calulateFare } from "../utils/calculateFare";
+import stripe from "stripe";
 
+const stripeSecretKeys = "";
+
+const stripeClient = new stripe(stripeSecretKeys, {
+  apiVersion: "2023-08-16",
+});
 interface rideReqBody {
   rideId: string;
 }
@@ -55,8 +62,16 @@ export const completRide: RequestHandler<
     if (!ride) {
       return res.status(404).json("ride not found");
     }
-
+    const fare = calulateFare(1000);
     ride.end_time = new Date();
+    ride.fare = fare;
+
+    const charge = await stripeClient.charges.create({
+      amount: fare,
+      currency: "usd",
+      source: "stripe-token",
+      description: "payment for a ride",
+    });
   } catch (error) {
     next(error);
   }

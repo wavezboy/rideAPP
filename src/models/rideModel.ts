@@ -6,7 +6,7 @@ const rideSchema = new Schema(
     passenger_id: { type: String },
     start_time: { type: Date },
     end_time: { type: Date },
-    fare: { type: String },
+    fare: { type: Number },
     distance: { type: String },
     ride_request_id: { type: Types.ObjectId },
   },
