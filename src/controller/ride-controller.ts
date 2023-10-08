@@ -55,6 +55,8 @@ export const completRide: RequestHandler<
     if (!ride) {
       return res.status(404).json("ride not found");
     }
+
+    ride.end_time = new Date();
   } catch (error) {
     next(error);
   }
