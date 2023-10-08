@@ -17,6 +17,7 @@ const driverSchema = new Schema(
     },
 
     availability: { type: Boolean },
+    driver_stripe_account_id: { type: String },
   },
   { timestamps: true }
 );

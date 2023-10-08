@@ -3,6 +3,7 @@ import rideModel from "../models/rideModel";
 import rideRequestModel from "../models/ride-request-model";
 import { calulateFare } from "../utils/calculateFare";
 import stripe from "stripe";
+import driverModel from "../models/driverModel";
 
 const stripeSecretKeys = "";
 
@@ -56,11 +57,22 @@ export const completRide: RequestHandler<
   unknown
 > = async (req, res, next) => {
   const rideId = req.params.rideId;
+
+  // i have to include the driver account in the driver model
+
   try {
     const ride = await rideModel.findOne({ rideId }).exec();
 
     if (!ride) {
       return res.status(404).json("ride not found");
+    }
+
+    const driverId = ride.driver_id;
+
+    const driver = await driverModel.findById(driverId).exec();
+
+    if (!driver) {
+      return res.status(500).json("no driver found");
     }
     const fare = calulateFare(1000);
     ride.end_time = new Date();
@@ -72,6 +84,19 @@ export const completRide: RequestHandler<
       source: "stripe-token",
       description: "payment for a ride",
     });
+    if (!charge) {
+      return res.status(500).json("payment could not be proceed");
+    }
+
+    const payout = await stripeClient.payouts.create({
+      amount: fare * 10,
+      currency: "usd",
+      destination: driver.driver_stripe_account_id,
+    });
+
+    if (!payout) {
+      return res.status(500).json("transaction failed");
+    }
   } catch (error) {
     next(error);
   }
