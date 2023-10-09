@@ -101,3 +101,10 @@ export const completRide: RequestHandler<
     next(error);
   }
 };
+
+export const getRideHistory: RequestHandler = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
