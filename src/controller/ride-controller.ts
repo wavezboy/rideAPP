@@ -103,7 +103,15 @@ export const completRide: RequestHandler<
 };
 
 export const getRideHistory: RequestHandler = async (req, res, next) => {
+  const userId = "";
   try {
+    const rides = await rideModel.find({ passenger_id: userId }).exec();
+
+    if (!rides || rides.length == 0) {
+      return res.status(500).json("you havent order any ride yet");
+    }
+
+    res.status(200).json({ rides });
   } catch (error) {
     next(error);
   }
