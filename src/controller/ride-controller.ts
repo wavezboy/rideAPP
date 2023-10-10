@@ -107,6 +107,7 @@ export const getRideHistory: RequestHandler = async (req, res, next) => {
   try {
     const rides = await rideModel
       .find({ $or: [{ passenger_id: userId }, { driver_id: userId }] })
+      .sort({ start_time: -1 })
       .populate("passenger_id", "name email")
       .populate("driver_id", "name email");
 
