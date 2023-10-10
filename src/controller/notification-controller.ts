@@ -34,3 +34,10 @@ export const sendNotification: RequestHandler<
     next(error);
   }
 };
+
+export const getNotification: RequestHandler = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
