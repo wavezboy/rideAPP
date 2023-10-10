@@ -4,6 +4,7 @@ const notificationSchema = new Schema(
   {
     user_id: { type: String },
     message: { type: String },
+    isRead: { type: Boolean },
   },
   { timestamps: true }
 );
