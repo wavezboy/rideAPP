@@ -105,7 +105,10 @@ export const completRide: RequestHandler<
 export const getRideHistory: RequestHandler = async (req, res, next) => {
   const userId = "";
   try {
-    const rides = await rideModel.find({ passenger_id: userId }).exec();
+    const rides = await rideModel
+      .find({ $or: [{ passenger_id: userId }, { driver_id: userId }] })
+      .populate("passenger_id", "name email")
+      .populate("driver_id", "name email");
 
     if (!rides || rides.length == 0) {
       return res.status(500).json("you havent order any ride yet");
