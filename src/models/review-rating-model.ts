@@ -6,6 +6,7 @@ const reviewSchema = new Schema(
     authour_id: { type: String },
     rating: { type: String },
     comment: { type: String },
+    driver_id: { type: String },
   },
   { timestamps: true }
 );

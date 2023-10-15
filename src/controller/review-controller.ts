@@ -30,6 +30,7 @@ export const createReview: RequestHandler<
       comment: comment,
       rating: rating,
       ride_id: ride._id,
+      driver_id: revieweeId,
     });
 
     res.status(200).json({ message: "review created succesfully", review });
@@ -38,9 +39,21 @@ export const createReview: RequestHandler<
   }
 };
 
-export const getDriverRating: RequestHandler = async (req, res, next) => {
+interface paramsBody {
+  DriverId: string;
+}
+
+export const getDriverRatings: RequestHandler<
+  paramsBody,
+  unknown,
+  unknown,
+  unknown
+> = async (req, res, next) => {
+  const { DriverId } = req.params;
   try {
-    res.status(200).json();
+    const driverRatings = await reviewRatingModel.find({ driver_id: DriverId });
+
+    res.status(200).json({ driverRatings });
   } catch (error) {
     next(error);
   }
