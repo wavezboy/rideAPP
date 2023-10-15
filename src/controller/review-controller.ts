@@ -37,3 +37,11 @@ export const createReview: RequestHandler<
     next();
   }
 };
+
+export const getDriverRating: RequestHandler = async (req, res, next) => {
+  try {
+    res.status(200).json();
+  } catch (error) {
+    next(error);
+  }
+};
