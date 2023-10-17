@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import CreateHttpError, { isHttpError } from "http-errors";
 import rideRoutes from "./routes/rides-routes";
+import rideRequestRoutes from "./routes/ride-request-routes";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("api/ride", rideRoutes);
+app.use("api/ride-request", rideRequestRoutes);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
