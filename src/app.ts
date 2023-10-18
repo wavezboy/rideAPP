@@ -4,6 +4,7 @@ import cors from "cors";
 import CreateHttpError, { isHttpError } from "http-errors";
 import rideRoutes from "./routes/rides-routes";
 import rideRequestRoutes from "./routes/ride-request-routes";
+import driverRoutes from "./routes/driver-routes";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("api/ride", rideRoutes);
 app.use("api/ride-request", rideRequestRoutes);
+app.use("api/driver", driverRoutes);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
