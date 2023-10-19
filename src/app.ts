@@ -5,6 +5,7 @@ import CreateHttpError, { isHttpError } from "http-errors";
 import rideRoutes from "./routes/rides-routes";
 import rideRequestRoutes from "./routes/ride-request-routes";
 import driverRoutes from "./routes/driver-routes";
+import reviewRoutes from "./routes/review-routes";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("api/ride", rideRoutes);
 app.use("api/ride-request", rideRequestRoutes);
 app.use("api/driver", driverRoutes);
+app.use("api/review", reviewRoutes);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
