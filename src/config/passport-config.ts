@@ -1,8 +1,8 @@
 import passport from "passport";
-import LocalStrategy from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 
-passport.use();
+passport.use(new LocalStrategy());
 
 export default passport;
