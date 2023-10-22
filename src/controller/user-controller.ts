@@ -4,6 +4,8 @@ import userModel from "../models/userModel";
 import { hashData, verifyHashedData } from "../utils/dataHashing";
 import { email } from "envalid";
 import { loginBody, loginValidate } from "../utils/loginValidate";
+import passport from "passport";
+import jwt from "jsonwebtoken";
 
 export const register: RequestHandler<
   unknown,
